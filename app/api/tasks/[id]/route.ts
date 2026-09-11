@@ -5,7 +5,7 @@ import { db } from '@/lib/db'
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const { state } = await request.json()
-  const res = await db.execute(sql`UPDATE tasks SET state = ${state}, updated_at = datetime('now') WHERE id = ${Number(id)} AND user_id = 1 RETURNING id, title, estimated_minutes, state, project_tag, sort_order, created_at`)
+  const res = await db.execute(sql`UPDATE tasks SET state = ${state}, updated_at = NOW() WHERE id = ${Number(id)} AND user_id = 1 RETURNING id, title, estimated_minutes, state, project_tag, sort_order, created_at`)
   return NextResponse.json(res.rows?.[0] ?? null)
 }
 
