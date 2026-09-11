@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 
 const OPTIONS = [30, 60, 180];
 
@@ -8,12 +10,8 @@ export default function BreathingTimer() {
   const [duration, setDuration] = useState(30);
   const [remaining, setRemaining] = useState(0);
   const [running, setRunning] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const reducedMotion = useMemo(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches, []);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  }, []);
 
   const stop = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -49,17 +47,17 @@ export default function BreathingTimer() {
   const secs = remaining % 60;
 
   return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-6 flex flex-col items-center">
-      <div className="relative w-32 h-32 mb-4">
-        <svg viewBox="0 0 120 120" className="w-full h-full -rotate-90">
-          <circle cx="60" cy="60" r="54" fill="none" stroke="#1a1a1a" strokeWidth="4" />
+    <div className="flex flex-col items-center gap-5">
+      <div className="relative w-32 h-32">
+        <svg viewBox="0 0 120 120" className="w-full h-full -rotate-90" aria-hidden="true">
+          <circle cx="60" cy="60" r="54" fill="none" strokeWidth="4" style={{ stroke: 'var(--border)' }} />
           <circle
             cx="60"
             cy="60"
             r="54"
             fill="none"
-            stroke="#00E859"
             strokeWidth="4"
+            style={{ stroke: 'var(--primary)' }}
             strokeDasharray={circumference}
             strokeDashoffset={dashoffset}
             strokeLinecap="round"
@@ -67,39 +65,42 @@ export default function BreathingTimer() {
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-2xl font-mono text-zinc-200">
-            {mins}:{String(secs).padStart(2, '0')}
+          <span className="text-2xl font-mono text-foreground" aria-live="polite" aria-atomic="true">
+            {running ? `${mins}:${String(secs).padStart(2, '0')}` : `${duration}s`}
           </span>
         </div>
       </div>
 
-      <div className="flex gap-2 mb-4">
+      {running && (
+        <Progress value={progress * 100} className="w-full max-w-[200px]" aria-label="Breathing progress" />
+      )}
+
+      <div className="flex gap-2" role="radiogroup" aria-label="Timer duration">
         {OPTIONS.map(s => (
-          <button
+          <Button
             key={s}
+            variant={duration === s ? 'default' : 'outline'}
+            size="sm"
             onClick={() => { setDuration(s); }}
             disabled={running}
-            className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
-              duration === s
-                ? 'bg-[#00E859] text-[#0A0A0B]'
-                : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
-            } ${running ? 'opacity-50 cursor-not-allowed' : ''}`}
+            role="radio"
+            aria-checked={duration === s}
+            aria-label={`${s} seconds`}
           >
             {s}s
-          </button>
+          </Button>
         ))}
       </div>
 
-      <button
+      <Button
         onClick={running ? stop : start}
-        className={`px-6 py-2 rounded-lg text-sm font-semibold transition-colors ${
-          running
-            ? 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
-            : 'bg-[#00E859] text-[#0A0A0B] hover:bg-[#00cc4d]'
-        }`}
+        variant={running ? 'secondary' : 'default'}
+        size="lg"
+        className="min-w-[120px]"
+        aria-label={running ? 'Stop breathing timer' : 'Start breathing timer'}
       >
         {running ? 'Stop' : 'Start'}
-      </button>
+      </Button>
     </div>
   );
 }

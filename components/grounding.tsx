@@ -1,13 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 
 const STEPS = [
-  { count: 5, sense: 'things you can see', icon: '👁' },
-  { count: 4, sense: 'things you can touch', icon: '✋' },
-  { count: 3, sense: 'things you can hear', icon: '👂' },
-  { count: 2, sense: 'things you can smell', icon: '👃' },
-  { count: 1, sense: 'thing you can taste', icon: '👅' },
+  { count: 5, sense: 'things you can see' },
+  { count: 4, sense: 'things you can touch' },
+  { count: 3, sense: 'things you can hear' },
+  { count: 2, sense: 'things you can smell' },
+  { count: 1, sense: 'thing you can taste' },
 ];
 
 export default function Grounding() {
@@ -18,17 +20,14 @@ export default function Grounding() {
 
   if (done) {
     return (
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-6 text-center">
-        <p className="text-[#00E859] font-semibold mb-2">You&#39;re grounded.</p>
-        <p className="text-sm text-zinc-400 mb-4">
+      <div className="text-center py-4">
+        <p className="text-primary font-semibold mb-2">You&#39;re grounded.</p>
+        <p className="text-sm text-muted-foreground mb-4">
           You&#39;ve anchored yourself to the present moment.
         </p>
-        <button
-          onClick={reset}
-          className="px-4 py-2 rounded-lg bg-zinc-800 text-zinc-300 text-sm hover:bg-zinc-700 transition-colors"
-        >
+        <Button variant="outline" onClick={reset}>
           Start over
-        </button>
+        </Button>
       </div>
     );
   }
@@ -36,41 +35,40 @@ export default function Grounding() {
   const step = STEPS[current];
 
   return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-6">
-      <div className="flex items-center gap-3 mb-4">
-        <span className="text-2xl">{step.icon}</span>
-        <div>
-          <p className="text-sm text-zinc-400">
-            Step {current + 1} of {STEPS.length}
-          </p>
-          <p className="text-lg font-semibold text-zinc-100">
-            Name {step.count} {step.sense}
-          </p>
-        </div>
+    <div className="flex flex-col gap-4">
+      <Progress
+        value={((current + 1) / STEPS.length) * 100}
+        aria-label={`Step ${current + 1} of ${STEPS.length}`}
+      />
+
+      <div>
+        <p className="text-sm text-muted-foreground mb-1">
+          Step {current + 1} of {STEPS.length}
+        </p>
+        <p className="text-lg font-semibold text-foreground">
+          Name {step.count} {step.sense}
+        </p>
       </div>
 
-      <p className="text-xs text-zinc-500 mb-4">
+      <p className="text-xs text-muted-foreground">
         Take your time. There&#39;s no rush.
       </p>
 
       <div className="flex gap-2">
         {current > 0 && (
-          <button
-            onClick={() => setCurrent(c => c - 1)}
-            className="px-4 py-2 rounded-lg bg-zinc-800 text-zinc-400 text-sm hover:bg-zinc-700 transition-colors"
-          >
+          <Button variant="outline" onClick={() => setCurrent(c => c - 1)}>
             Back
-          </button>
+          </Button>
         )}
-        <button
+        <Button
+          className="flex-1"
           onClick={() => {
             if (current === STEPS.length - 1) setDone(true);
             else setCurrent(c => c + 1);
           }}
-          className="flex-1 px-4 py-2 rounded-lg bg-[#00E859] text-[#0A0A0B] text-sm font-semibold hover:bg-[#00cc4d] transition-colors"
         >
           {current === STEPS.length - 1 ? 'Done' : 'Next'}
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -48,24 +48,30 @@ export async function parseTranscript(transcript: string): Promise<ParsedItem[]>
     throw new Error(`Nvidia parse failed (${res.status}): ${body.slice(0, 300)}`);
   }
 
-  const data = await res.json();
+  const data = await res.json() as { choices?: Array<{ message?: { content?: unknown } }> };
   const content = data.choices?.[0]?.message?.content;
-  if (!content) throw new Error('Nvidia returned empty content');
+  if (!content || typeof content !== 'string') throw new Error('Nvidia returned empty content');
 
-  let parsed: any;
+  let parsed: { items?: unknown[] };
   try {
     parsed = JSON.parse(content);
-  } catch (e) {
+  } catch (e: unknown) {
     throw new Error('Nvidia returned invalid JSON: ' + content.slice(0, 200));
   }
 
-  const items: ParsedItem[] = Array.isArray(parsed.items) ? parsed.items : [];
+  const items = Array.isArray(parsed.items) ? parsed.items : [];
   return items
-    .filter((it: any) => it && typeof it.text === 'string' && it.text.trim().length > 0)
-    .map((it: any) => ({
-      type: ['task', 'reminder', 'routine_step', 'anxiety_log'].includes(it.type) ? it.type : 'task',
+    .filter((it): it is Record<string, unknown> => {
+      if (!it || typeof it !== 'object') return false;
+      const o = it as Record<string, unknown>;
+      return typeof o.text === 'string' && o.text.trim().length > 0;
+    })
+    .map((it): ParsedItem => ({
+      type: ['task', 'reminder', 'routine_step', 'anxiety_log'].includes(it.type as string)
+        ? (it.type as ParsedItem['type'])
+        : 'task',
       text: String(it.text).trim(),
-      minutes: Number.isInteger(it.minutes) ? Math.min(60, Math.max(1, it.minutes)) : null,
+      minutes: Number.isInteger(it.minutes) ? Math.min(60, Math.max(1, it.minutes as number)) : null,
       due_at: typeof it.due_at === 'string' && it.due_at ? it.due_at : null,
-    }));
+    }))
 }

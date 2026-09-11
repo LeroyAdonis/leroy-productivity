@@ -14,5 +14,5 @@ export function getDb() {
 }
 
 export const db = new Proxy({} as ReturnType<typeof drizzle>, {
-  get(_target, prop) { return (getDb() as any)[prop]; },
-});
+  get(_target, prop) { return (getDb() as ReturnType<typeof drizzle>)[prop]; }
+}) as ReturnType<typeof drizzle>;

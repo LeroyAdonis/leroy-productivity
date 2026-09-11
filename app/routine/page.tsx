@@ -1,20 +1,42 @@
 import { db } from '@/lib/db';
 import RoutineList from '@/components/routine-list';
 
+interface RoutineWithSteps {
+  routineId: number;
+  routineName: string;
+  steps: {
+    id: number;
+    text: string;
+    minutes: number;
+    completed: boolean;
+  }[];
+}
+
+interface RoutineRow {
+  routine_id: number;
+  routine_name: string;
+  step_id: number | null;
+  step_text: string | null;
+  estimated_minutes: number;
+  sort_order: number;
+  completed: boolean;
+  completed_at: string | null;
+}
+
 export const dynamic = 'force-dynamic';
 
 export default async function RoutinePage() {
-  const routines = await (db as any).execute(
-    `SELECT r.id as routine_id, r.name as routine_name,
-            s.id as step_id, s.step_text, s.estimated_minutes, s.sort_order, s.completed, s.completed_at
-     FROM daily_routines r
-     LEFT JOIN routine_steps s ON s.routine_id = r.id
-     WHERE r.is_active = true
-     ORDER BY r.sort_order, s.sort_order`
-  );
+  const routinesRows = await db.execute(`
+    SELECT r.id as routine_id, r.name as routine_name,
+           s.id as step_id, s.step_text, s.estimated_minutes, s.sort_order, s.completed, s.completed_at
+    FROM daily_routines r
+    LEFT JOIN routine_steps s ON s.routine_id = r.id
+    WHERE r.is_active = true
+    ORDER BY r.sort_order, s.sort_order
+  `);
 
-  const byRoutine: Record<string, { routineId: number; routineName: string; steps: any[] }> = {};
-  for (const row of routines.rows ?? []) {
+  const byRoutine: Record<string, RoutineWithSteps> = {};
+  for (const row of (routinesRows.rows ?? []) as RoutineRow[]) {
     const key = String(row.routine_id);
     if (!byRoutine[key]) {
       byRoutine[key] = { routineId: Number(row.routine_id), routineName: row.routine_name, steps: [] };

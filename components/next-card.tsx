@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { getNextAction, type NextAction } from '@/lib/next-action'
+import { type NextAction } from '@/lib/next-action'
 
 interface Props {
   item: NextAction

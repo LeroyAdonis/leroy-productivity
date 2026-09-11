@@ -1,56 +1,50 @@
-import { db } from '@/lib/db';
+import { listReminders } from '@/lib/queries';
 import ReminderCard from '@/components/reminder-card';
+
+interface Reminder {
+  id: number;
+  message: string;
+  action?: string | null;
+  remind_at: string;
+  state: string;
+  estimated_minutes?: number;
+  snooze_until?: string | null;
+}
 
 export const dynamic = 'force-dynamic';
 
 export default async function RemindersPage() {
   const now = new Date().toISOString();
 
-  const due = await (db as any).execute(
-    `SELECT * FROM reminders WHERE state = 'due' OR remind_at <= '${now}' ORDER BY remind_at ASC`
-  );
-  const upcoming = await (db as any).execute(
-    `SELECT * FROM reminders WHERE state = 'pending' AND remind_at > '${now}' ORDER BY remind_at ASC`
-  );
-  const snoozed = await (db as any).execute(
-    `SELECT * FROM reminders WHERE state = 'snoozed' ORDER BY snooze_until ASC`
-  );
+  const allReminders = await listReminders();
 
-  const toCard = (row: any) => ({
-    id: Number(row.id),
-    message: row.message,
-    action: row.action,
-    remindAt: row.remind_at,
-    state: row.state,
-    snoozeUntil: row.snooze_until,
-  });
-
-  const dueList = (due.rows ?? []).map(toCard);
-  const upcomingList = (upcoming.rows ?? []).map(toCard);
-  const snoozedList = (snoozed.rows ?? []).map(toCard);
+  const due = allReminders.filter(r => 
+    r.state === 'due' || new Date(r.remind_at) <= new Date()
+  );
+  const upcoming = allReminders.filter(r => 
+    r.state === 'pending' && new Date(r.remind_at) > new Date()
+  );
+  const snoozed = allReminders.filter(r => r.state === 'snoozed');
 
   return (
     <div className="min-h-screen bg-[#0A0A0B] text-zinc-100 px-4 py-8 max-w-xl mx-auto">
       <h1 className="text-2xl font-bold mb-6 text-[#C8A951]">Reminders</h1>
 
-      <Section title="Due Now" color="text-[#00E859]" items={dueList} empty="Nothing due." />
-      <Section title="Upcoming" color="text-zinc-400" items={upcomingList} empty="All clear." />
-      <Section title="Snoozed" color="text-[#C8A951]" items={snoozedList} empty="No snoozed reminders." />
+      <Section title="Due Now" color="text-[#00E859]" items={due} empty="Nothing due." />
+      <Section title="Upcoming" color="text-zinc-400" items={upcoming} empty="All clear." />
+      <Section title="Snoozed" color="text-[#C8A951]" items={snoozed} empty="No snoozed reminders." />
     </div>
   );
 }
 
-function Section({
-  title,
-  color,
-  items,
-  empty,
-}: {
+interface SectionProps {
   title: string;
   color: string;
-  items: { id: number; message: string; action: string | null; remindAt: string; state: string; snoozeUntil: string | null }[];
+  items: Reminder[];
   empty: string;
-}) {
+}
+
+function Section({ title, color, items, empty }: SectionProps) {
   return (
     <div className="mb-8">
       <h2 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${color}`}>{title}</h2>
@@ -64,9 +58,9 @@ function Section({
               id={item.id}
               message={item.message}
               action={item.action}
-              remindAt={item.remindAt}
+              remindAt={item.remind_at}
               state={item.state}
-              snoozeUntil={item.snoozeUntil}
+              snoozeUntil={item.snooze_until}
             />
           ))}
         </div>

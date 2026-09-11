@@ -17,7 +17,7 @@ interface Routine {
 
 export default function RoutineList({ routines }: { routines: Routine[] }) {
   const [data, setData] = useState<Routine[]>(routines);
-  const [isPending, startTransition] = useTransition();
+  // const [isPending, startTransition] = useTransition(); // preserved for future async updates
 
   const toggleStep = (routineId: number, stepId: number) => {
     setData(prev =>

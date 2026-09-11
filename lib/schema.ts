@@ -1,7 +1,3 @@
-import { sql } from 'drizzle-orm';
-import * as fs from 'fs';
-import * as path from 'path';
-
 export const schemaSql = `
   -- Users table for preferences and settings
   CREATE TABLE IF NOT EXISTS users (
@@ -24,7 +20,7 @@ export const schemaSql = `
     sort_order INTEGER DEFAULT 0,
     is_active BOOLEAN DEFAULT true,
     created_at TEXT DEFAULT (NOW()),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    updated_at TEXT DEFAULT (NOW())
   );
 
   -- Steps within routines
@@ -105,10 +101,10 @@ export const schemaSql = `
     (4, 2, 'Tonight wind-down: 2 min', 2, 0),
     (5, 2, 'Log today wins: 3 min', 3, 1);
 
-  INSERT INTO tasks (id, user_id, title, estimated_minutes, state, sort_order) VALUES
-    (1, 1, 'Email George about ILALI', 5, 'now', 0),
-    (2, 1, 'Fix voice transcription bug', 15, 'now', 1),
-    (3, 1, 'Call Zahra-Rose to say hi', 3, 'later', 0);
+  INSERT INTO tasks (id, user_id, title, estimated_minutes, state, project_tag) VALUES
+    (1, 1, 'Email George about ILALI', 5, 'now', '0'),
+    (2, 1, 'Fix voice transcription bug', 15, 'now', '1'),
+    (3, 1, 'Call Zahra-Rose to say hi', 3, 'later', '0');
 
   INSERT INTO reminders (id, user_id, message, action, remind_at, state) VALUES
     (1, 1, 'Fetch Zayden''s meds at 2pm', 'Open medicine cabinet', '2026-09-11T14:00:00', 'pending'),
