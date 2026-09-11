@@ -17,16 +17,3 @@ export async function POST(request: Request) {
   if (!row) throw new Error('Failed to create task')
   return NextResponse.json({ id: Number(row.id), title, estimated_minutes, state, project_tag })
 }
-
-export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  const { state } = await request.json()
-  const res = await db.execute(sql`UPDATE tasks SET state = ${state}, updated_at = datetime('now') WHERE id = ${Number(id)} AND user_id = 1 RETURNING id, title, estimated_minutes, state, project_tag, sort_order, created_at`)
-  return NextResponse.json(res.rows?.[0] ?? null)
-}
-
-export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  await db.execute(sql`DELETE FROM tasks WHERE id = ${Number(id)} AND user_id = 1`)
-  return NextResponse.json({ success: true })
-}
