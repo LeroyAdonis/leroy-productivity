@@ -43,6 +43,3 @@ blueprint/
 .agents/skills/
 .hermes/
 WORKSPACE_OUTPUT.md
-components.json
-components/ui/
-lib/utils.ts
