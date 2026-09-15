@@ -1,15 +1,11 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import RegisterSW from "./register-sw";
+import PremiumNav from "@/components/premium-nav";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -18,19 +14,20 @@ export const metadata: Metadata = {
   description: "Personal productivity app",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} h-full antialiased`}
     >
       <head>
         <link rel="manifest" href="/manifest.webmanifest" />
-        <meta name="theme-color" content="#0A0A0B" />
+        <meta name="theme-color" content="#020617" />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col bg-[var(--color-bg)] text-[var(--color-foreground)]">
         <RegisterSW />
-        {children}
+        <PremiumNav />
+        <main className="pt-20 pb-10 px-4 max-w-2xl mx-auto font-sans">{children}</main>
       </body>
     </html>
   );

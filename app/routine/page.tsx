@@ -1,42 +1,13 @@
 import { db } from '@/lib/db';
 import RoutineList from '@/components/routine-list';
 
-interface RoutineWithSteps {
-  routineId: number;
-  routineName: string;
-  steps: {
-    id: number;
-    text: string;
-    minutes: number;
-    completed: boolean;
-  }[];
-}
-
-interface RoutineRow {
-  routine_id: number;
-  routine_name: string;
-  step_id: number | null;
-  step_text: string | null;
-  estimated_minutes: number;
-  sort_order: number;
-  completed: boolean;
-  completed_at: string | null;
-}
-
 export const dynamic = 'force-dynamic';
 
 export default async function RoutinePage() {
-  const routinesRows = await db.execute(`
-    SELECT r.id as routine_id, r.name as routine_name,
-           s.id as step_id, s.step_text, s.estimated_minutes, s.sort_order, s.completed, s.completed_at
-    FROM daily_routines r
-    LEFT JOIN routine_steps s ON s.routine_id = r.id
-    WHERE r.is_active = true
-    ORDER BY r.sort_order, s.sort_order
-  `);
+  const routinesRows = await db.execute(`\n    SELECT r.id as routine_id, r.name as routine_name,\n           s.id as step_id, s.step_text, s.estimated_minutes, s.sort_order, s.completed, s.completed_at\n    FROM daily_routines r\n    LEFT JOIN routine_steps s ON s.routine_id = r.id\n    WHERE r.is_active = true\n    ORDER BY r.sort_order, s.sort_order\n  `);
 
-  const byRoutine: Record<string, RoutineWithSteps> = {};
-  for (const row of (routinesRows.rows ?? []) as RoutineRow[]) {
+  const byRoutine: any = {};
+  for (const row of (routinesRows.rows ?? [])) {
     const key = String(row.routine_id);
     if (!byRoutine[key]) {
       byRoutine[key] = { routineId: Number(row.routine_id), routineName: row.routine_name, steps: [] };
@@ -44,7 +15,7 @@ export default async function RoutinePage() {
     if (row.step_id) {
       byRoutine[key].steps.push({
         id: Number(row.step_id),
-        text: row.step_text,
+        text: row.step_text ?? '',
         minutes: Number(row.estimated_minutes),
         completed: row.completed === true,
       });
@@ -56,7 +27,7 @@ export default async function RoutinePage() {
   const completedSteps = routinesList.reduce((a, r) => a + r.steps.filter(s => s.completed).length, 0);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-zinc-100 px-4 py-8 max-w-xl mx-auto">
+    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-foreground)] px-4 py-8 max-w-xl mx-auto">
       <h1 className="text-2xl font-bold mb-1 text-[#00E859]">Routine</h1>
       <p className="text-zinc-400 text-sm mb-6">
         {completedSteps}/{totalSteps} steps done today
