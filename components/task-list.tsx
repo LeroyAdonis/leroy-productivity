@@ -1,9 +1,7 @@
-'use client'
+'use client';
 
 import { useState, useEffect } from 'react';
-import { listTasks, listRoutineSteps } from '@/lib/queries';
-import type { Task } from '@/lib/queries';
-import type { RoutineStep } from '@/lib/queries';
+import { listTasks, listRoutineSteps, Task, RoutineStep } from '@/lib/queries';
 
 import { Button } from '@/components/ui/button';
 
@@ -94,17 +92,17 @@ export default function TaskList({ onCompleteStep, onCompleteTask, onMoveTask }:
 
   return (
     <div className="space-y-8">
-      <div className="rounded-xl border bg-zinc-900/60 p-4">
+      <div className="rounded-xl border bg-zinc-900/60 p-4 glass-elevation">
         <h3 className="text-sm font-semibold uppercase tracking-wider mb-3 text-zinc-400">Now</h3>
         {nowList}
       </div>
 
-      <div className="rounded-xl border bg-zinc-900/60 p-4">
+      <div className="rounded-xl border bg-zinc-900/60 p-4 glass-elevation">
         <h3 className="text-sm font-semibold uppercase tracking-wider mb-3 text-zinc-400">Later</h3>
         {laterList}
       </div>
 
-      <div className="rounded-xl border bg-zinc-900/60 p-4">
+      <div className="rounded-xl border bg-zinc-900/60 p-4 glass-elevation">
         <h3 className="text-sm font-semibold uppercase tracking-wider mb-3 text-zinc-400">Done</h3>
         {doneCountDisplay}
       </div>

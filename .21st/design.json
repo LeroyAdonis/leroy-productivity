@@ -1,0 +1,247 @@
+{
+  "version": 1,
+  "project": {
+    "name": "leroy-productivity",
+    "productType": null,
+    "stack": [
+      "nextjs",
+      "react",
+      "shadcn",
+      "tailwind-v4"
+    ]
+  },
+  "sources": {
+    "tokens": [
+      "app/globals.css"
+    ],
+    "components": [
+      "components/ui"
+    ],
+    "assets": [],
+    "instructions": [
+      "AGENTS.md",
+      "CLAUDE.md"
+    ]
+  },
+  "design": {
+    "colorMode": "light-and-dark",
+    "colors": {
+      "--background": {
+        "value": "#0A0A0B",
+        "source": "app/globals.css"
+      },
+      "--foreground": {
+        "value": "#EDEDED",
+        "source": "app/globals.css"
+      },
+      "--card-foreground": {
+        "value": "#EDEDED",
+        "source": "app/globals.css"
+      },
+      "--popover-foreground": {
+        "value": "#EDEDED",
+        "source": "app/globals.css"
+      },
+      "--primary": {
+        "value": "#00E859",
+        "source": "app/globals.css"
+      },
+      "--primary-foreground": {
+        "value": "#0A0A0B",
+        "source": "app/globals.css"
+      },
+      "--secondary": {
+        "value": "#27272A",
+        "source": "app/globals.css"
+      },
+      "--secondary-foreground": {
+        "value": "#EDEDED",
+        "source": "app/globals.css"
+      },
+      "--muted": {
+        "value": "#27272A",
+        "source": "app/globals.css"
+      },
+      "--muted-foreground": {
+        "value": "#A1A1AA",
+        "source": "app/globals.css"
+      },
+      "--accent": {
+        "value": "#00E859",
+        "source": "app/globals.css"
+      },
+      "--accent-foreground": {
+        "value": "#0A0A0B",
+        "source": "app/globals.css"
+      },
+      "--destructive": {
+        "value": "#7F1D1D",
+        "source": "app/globals.css"
+      },
+      "--destructive-foreground": {
+        "value": "#FCA5A5",
+        "source": "app/globals.css"
+      },
+      "--border": {
+        "value": "#27272A",
+        "source": "app/globals.css"
+      },
+      "--ring": {
+        "value": "#00E859",
+        "source": "app/globals.css"
+      },
+      "--color-background": {
+        "value": "var(--background)",
+        "source": "app/globals.css"
+      },
+      "--color-foreground": {
+        "value": "var(--foreground)",
+        "source": "app/globals.css"
+      },
+      "--color-card": {
+        "value": "var(--card)",
+        "source": "app/globals.css"
+      },
+      "--color-card-foreground": {
+        "value": "var(--card-foreground)",
+        "source": "app/globals.css"
+      },
+      "--color-popover": {
+        "value": "var(--popover)",
+        "source": "app/globals.css"
+      },
+      "--color-popover-foreground": {
+        "value": "var(--popover-foreground)",
+        "source": "app/globals.css"
+      },
+      "--color-primary": {
+        "value": "var(--primary)",
+        "source": "app/globals.css"
+      },
+      "--color-primary-foreground": {
+        "value": "var(--primary-foreground)",
+        "source": "app/globals.css"
+      },
+      "--color-secondary": {
+        "value": "var(--secondary)",
+        "source": "app/globals.css"
+      },
+      "--color-secondary-foreground": {
+        "value": "var(--secondary-foreground)",
+        "source": "app/globals.css"
+      },
+      "--color-muted": {
+        "value": "var(--muted)",
+        "source": "app/globals.css"
+      },
+      "--color-muted-foreground": {
+        "value": "var(--muted-foreground)",
+        "source": "app/globals.css"
+      },
+      "--color-accent": {
+        "value": "var(--accent)",
+        "source": "app/globals.css"
+      },
+      "--color-accent-foreground": {
+        "value": "var(--accent-foreground)",
+        "source": "app/globals.css"
+      },
+      "--color-destructive": {
+        "value": "var(--destructive)",
+        "source": "app/globals.css"
+      },
+      "--color-destructive-foreground": {
+        "value": "var(--destructive-foreground)",
+        "source": "app/globals.css"
+      },
+      "--color-border": {
+        "value": "var(--border)",
+        "source": "app/globals.css"
+      },
+      "--color-input": {
+        "value": "var(--input)",
+        "source": "app/globals.css"
+      },
+      "--color-ring": {
+        "value": "var(--ring)",
+        "source": "app/globals.css"
+      }
+    },
+    "typography": {
+      "--font-sans": {
+        "value": "var(--font-geist-sans)",
+        "source": "app/globals.css"
+      },
+      "--font-mono": {
+        "value": "var(--font-geist-mono)",
+        "source": "app/globals.css"
+      }
+    },
+    "spacing": {},
+    "radius": {
+      "--radius": {
+        "value": "var(--radius)",
+        "source": "app/globals.css"
+      }
+    },
+    "shadows": {},
+    "motion": {},
+    "density": "unknown"
+  },
+  "components": {
+    "installed": [
+      "button",
+      "card",
+      "progress",
+      "separator"
+    ],
+    "preferredPrimitives": [
+      "radix-ui"
+    ],
+    "patterns": []
+  },
+  "constraints": {
+    "must": [],
+    "avoid": []
+  },
+  "decisions": [],
+  "evidence": [
+    {
+      "fact": "components.installed",
+      "source": "components/ui"
+    },
+    {
+      "fact": "design.colorMode:light-and-dark",
+      "source": "app/globals.css"
+    },
+    {
+      "fact": "design.tokens",
+      "source": "app/globals.css"
+    },
+    {
+      "fact": "project.instructions",
+      "source": "AGENTS.md"
+    },
+    {
+      "fact": "project.instructions",
+      "source": "CLAUDE.md"
+    },
+    {
+      "fact": "project.stack:nextjs",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:react",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:shadcn",
+      "source": "components.json"
+    },
+    {
+      "fact": "project.stack:tailwind-v4",
+      "source": "package.json"
+    }
+  ],
+  "generatedAt": "2026-09-12T10:06:56.777Z"
+}

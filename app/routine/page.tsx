@@ -1,22 +1,48 @@
 import { db } from '@/lib/db';
+import { sql } from 'drizzle-orm';
 import RoutineList from '@/components/routine-list';
+
+interface RoutineRow {
+  routine_id: number;
+  routine_name: string;
+  step_id: number | null;
+  step_text: string | null;
+  estimated_minutes: number | null;
+  sort_order: number;
+  completed: boolean;
+  completed_at: string | null;
+}
 
 export const dynamic = 'force-dynamic';
 
 export default async function RoutinePage() {
-  const routinesRows = await db.execute(`\n    SELECT r.id as routine_id, r.name as routine_name,\n           s.id as step_id, s.step_text, s.estimated_minutes, s.sort_order, s.completed, s.completed_at\n    FROM daily_routines r\n    LEFT JOIN routine_steps s ON s.routine_id = r.id\n    WHERE r.is_active = true\n    ORDER BY r.sort_order, s.sort_order\n  `);
+  const routinesRows = await db.execute(sql<{
+    routine_id: number;
+    routine_name: string;
+    step_id: number | null;
+    step_text: string | null;
+    estimated_minutes: number | null;
+    sort_order: number;
+    completed: boolean;
+    completed_at: string | null;
+  }>`SELECT r.id as routine_id, r.name as routine_name,
+         s.id as step_id, s.step_text, s.estimated_minutes, s.sort_order, s.completed, s.completed_at
+    FROM daily_routines r
+    LEFT JOIN routine_steps s ON s.routine_id = r.id
+    WHERE r.is_active = true
+    ORDER BY r.sort_order, s.sort_order`);
 
-  const byRoutine: any = {};
+  const byRoutine: Record<number, { routineId: number; routineName: string; steps: RoutineStep[] }> = {};
   for (const row of (routinesRows.rows ?? [])) {
-    const key = String(row.routine_id);
+    const key = row.routine_id;
     if (!byRoutine[key]) {
-      byRoutine[key] = { routineId: Number(row.routine_id), routineName: row.routine_name, steps: [] };
+      byRoutine[key] = { routineId: key, routineName: row.routine_name, steps: [] };
     }
     if (row.step_id) {
       byRoutine[key].steps.push({
-        id: Number(row.step_id),
+        id: row.step_id,
         text: row.step_text ?? '',
-        minutes: Number(row.estimated_minutes),
+        minutes: row.estimated_minutes ?? 0,
         completed: row.completed === true,
       });
     }
