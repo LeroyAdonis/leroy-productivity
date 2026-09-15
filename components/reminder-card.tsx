@@ -11,9 +11,18 @@ interface ReminderCardProps {
   snoozeUntil: string | null;
 }
 
-export default function ReminderCard({ id, message, action, remindAt, state, snoozeUntil }: ReminderCardProps) {
+export default function ReminderCard({
+  id,
+  message,
+  action,
+  remindAt,
+  state,
+  snoozeUntil,
+}: ReminderCardProps) {
   const [gone, setGone] = useState(false);
   const [snoozedMsg, setSnoozedMsg] = useState('');
+
+  if (gone) return null;
 
   const displayTime = snoozeUntil || remindAt;
   const dt = new Date(displayTime);
@@ -59,31 +68,35 @@ export default function ReminderCard({ id, message, action, remindAt, state, sno
 
   return (
     <div
-      className={`rounded-xl border p-4 ${isOverdue ? 'border-[#00D4AA]/40 bg-[#00D4AA]/5' : 'border-zinc-800 bg-zinc-900/60'}`}
+      className={`rounded-xl border p-4 ${
+        isOverdue
+          ? 'border-[#00E859]/40 bg-[#00E859]/5'
+          : 'border-zinc-800 bg-zinc-900/60'
+      }`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-zinc-200 leading-snug">{message}</p>
           {action && (
-            <p className="text-xs text-[#64FFDA] mt-1">{action}</p>
+            <p className="text-xs text-[#C8A951] mt-1">{action}</p>
           )}
           <p className="text-xs text-zinc-500 mt-1">
             {dateLabel} at {timeLabel}
           </p>
           {snoozedMsg && (
-            <p className="text-xs text-[#64FFDA] mt-1">{snoozedMsg}</p>
+            <p className="text-xs text-[#C8A951] mt-1">{snoozedMsg}</p>
           )}
         </div>
         <div className="flex flex-col gap-1.5 flex-shrink-0">
           <button
             onClick={() => handleSnooze(15)}
-            className="text-xs px-2 py-1 rounded bg-zinc-800 text-zinc-400 hover:text-[#64FFDA] hover:bg-zinc-700 transition-colors"
+            className="text-xs px-2 py-1 rounded bg-zinc-800 text-zinc-400 hover:text-[#C8A951] hover:bg-zinc-700 transition-colors"
           >
             15m
           </button>
           <button
             onClick={() => handleSnooze(60)}
-            className="text-xs px-2 py-1 rounded bg-zinc-800 text-zinc-400 hover:text-[#64FFDA] hover:bg-zinc-700 transition-colors"
+            className="text-xs px-2 py-1 rounded bg-zinc-800 text-zinc-400 hover:text-[#C8A951] hover:bg-zinc-700 transition-colors"
           >
             1h
           </button>
@@ -92,7 +105,7 @@ export default function ReminderCard({ id, message, action, remindAt, state, sno
       <div className="flex gap-2 mt-3">
         <button
           onClick={handleDone}
-          className="flex-1 text-xs py-1.5 rounded bg-[#00D4AA] text-[#0A0A0F] font-semibold hover:bg-[#64FFDA] transition-colors"
+          className="flex-1 text-xs py-1.5 rounded bg-[#00E859] text-[#0A0A0B] font-semibold hover:bg-[#00cc4d] transition-colors"
         >
           Done
         </button>
