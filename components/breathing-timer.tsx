@@ -79,7 +79,7 @@ export default function BreathingTimer() {
         {OPTIONS.map(s => (
           <Button
             key={s}
-            variant={duration === s ? 'default' : 'outline'}
+            variant={duration === s ? 'default' : 'outlined'}
             size="sm"
             onClick={() => { setDuration(s); }}
             disabled={running}
@@ -94,7 +94,7 @@ export default function BreathingTimer() {
 
       <Button
         onClick={running ? stop : start}
-        variant={running ? 'secondary' : 'default'}
+        variant={running ? 'tonal' : 'default'}
         size="lg"
         className="min-w-[120px]"
         aria-label={running ? 'Stop breathing timer' : 'Start breathing timer'}

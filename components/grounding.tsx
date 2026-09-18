@@ -25,7 +25,7 @@ export default function Grounding() {
         <p className="text-sm text-muted-foreground mb-4">
           You&#39;ve anchored yourself to the present moment.
         </p>
-        <Button variant="outline" onClick={reset}>
+        <Button variant="outlined" onClick={reset}>
           Start over
         </Button>
       </div>
@@ -56,7 +56,7 @@ export default function Grounding() {
 
       <div className="flex gap-2">
         {current > 0 && (
-          <Button variant="outline" onClick={() => setCurrent(c => c - 1)}>
+          <Button variant="outlined" onClick={() => setCurrent(c => c - 1)}>
             Back
           </Button>
         )}
