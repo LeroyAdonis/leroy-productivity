@@ -18,21 +18,28 @@ export default async function RemindersPage() {
 
   const allReminders = await listReminders();
 
-  const due = allReminders.filter(r => 
+  const due = allReminders.filter(r =>
     r.state === 'due' || new Date(r.remind_at) <= new Date()
   );
-  const upcoming = allReminders.filter(r => 
+  const upcoming = allReminders.filter(r =>
     r.state === 'pending' && new Date(r.remind_at) > new Date()
   );
   const snoozed = allReminders.filter(r => r.state === 'snoozed');
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-zinc-100 px-4 py-8 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-[#C8A951]">Reminders</h1>
+    <div className="min-h-screen bg-[var(--md-surface)] text-[var(--md-on-surface)]">
+      {/* M3 Top App Bar */}
+      <header className="md-top-app-bar px-4">
+        <h1 className="text-[var(--md-headline-medium)] font-semibold text-[var(--md-on-surface)]">
+          Reminders
+        </h1>
+      </header>
 
-      <Section title="Due Now" color="text-[#00E859]" items={due} empty="Nothing due." />
-      <Section title="Upcoming" color="text-zinc-400" items={upcoming} empty="All clear." />
-      <Section title="Snoozed" color="text-[#C8A951]" items={snoozed} empty="No snoozed reminders." />
+      <div className="px-4 py-4 space-y-6">
+        <Section title="Due Now" color="bg-[var(--md-error)]" items={due} empty="Nothing due." />
+        <Section title="Upcoming" color="bg-[var(--md-primary)]" items={upcoming} empty="All clear." />
+        <Section title="Snoozed" color="bg-[var(--md-tertiary)]" items={snoozed} empty="No snoozed reminders." />
+      </div>
     </div>
   );
 }
@@ -46,10 +53,19 @@ interface SectionProps {
 
 function Section({ title, color, items, empty }: SectionProps) {
   return (
-    <div className="mb-8">
-      <h2 className={`text-sm font-semibold uppercase tracking-wider mb-3 ${color}`}>{title}</h2>
+    <section>
+      <div className="flex items-center gap-2 mb-3">
+        <div className={`w-2 h-2 rounded-full ${color}`} />
+        <h2 className="text-[var(--md-title-small)] font-medium uppercase tracking-wider text-[var(--md-on-surface-variant)]">
+          {title}
+        </h2>
+      </div>
       {items.length === 0 ? (
-        <p className="text-zinc-600 text-sm">{empty}</p>
+        <div className="md-card md-card-filled p-4 text-center">
+          <p className="text-[var(--md-body-medium)] text-[var(--md-on-surface-variant)]">
+            {empty}
+          </p>
+        </div>
       ) : (
         <div className="space-y-3">
           {items.map(item => (
@@ -65,6 +81,6 @@ function Section({ title, color, items, empty }: SectionProps) {
           ))}
         </div>
       )}
-    </div>
+    </section>
   );
 }

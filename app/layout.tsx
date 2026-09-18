@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import RegisterSW from "./register-sw";
-import PremiumNav from "@/components/premium-nav";
+import MdBottomNav from "@/components/md-bottom-nav";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -22,12 +22,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         <link rel="manifest" href="/manifest.webmanifest" />
-        <meta name="theme-color" content="#020617" />
+        <meta name="theme-color" content="#0A0A0B" />
       </head>
-      <body className="min-h-full flex flex-col bg-[var(--color-bg)] text-[var(--color-foreground)]">
+      <body className="min-h-full flex flex-col bg-[var(--md-surface)] text-[var(--md-on-surface)]">
         <RegisterSW />
-        <PremiumNav />
-        <main className="pt-20 pb-10 px-4 max-w-2xl mx-auto font-sans">{children}</main>
+        <main className="flex-1 pb-20">{children}</main>
+        <MdBottomNav />
       </body>
     </html>
   );
