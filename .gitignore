@@ -43,3 +43,5 @@ blueprint/
 .agents/skills/
 .hermes/
 WORKSPACE_OUTPUT.md
+# Added by code-review-graph
+.code-review-graph/

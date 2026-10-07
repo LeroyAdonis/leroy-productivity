@@ -1,4 +1,9 @@
-@AGENTS.md
+---
+applyTo: '**'
+description: >-
+  Use code-review-graph MCP tools for token-efficient
+  codebase exploration and code review.
+---
 
 <!-- code-review-graph MCP tools -->
 ## MCP Tools: code-review-graph
@@ -9,11 +14,11 @@ gives you structural context (callers, dependents, test coverage) that file sear
 
 ### When to use graph tools FIRST
 
-- **Exploring code**: `semantic_search_nodes_tool` or `query_graph_tool` instead of Grep
-- **Understanding impact**: `get_impact_radius_tool` instead of manually tracing imports
-- **Code review**: `detect_changes_tool` + `get_review_context_tool` instead of reading entire files
-- **Finding relationships**: `query_graph_tool` with callers_of/callees_of/imports_of/tests_for
-- **Architecture questions**: `get_architecture_overview_tool` + `list_communities_tool`
+- **Exploring code**: `semantic_search_nodes_tool` or `query_graph_tool`
+- **Understanding impact**: `get_impact_radius_tool`
+- **Code review**: `detect_changes_tool` + `get_review_context_tool`
+- **Finding relationships**: `query_graph_tool` callers_of/callees_of
+- **Architecture questions**: `get_architecture_overview_tool`
 
 ### Verify in the source
 
@@ -29,14 +34,14 @@ gives you structural context (callers, dependents, test coverage) that file sear
 
 | Tool | Use when |
 | ------ | ---------- |
-| `detect_changes_tool` | Reviewing code changes — gives risk-scored analysis |
-| `get_review_context_tool` | Need source snippets for review — token-efficient |
-| `get_impact_radius_tool` | Understanding blast radius of a change |
-| `get_affected_flows_tool` | Finding which execution paths are impacted |
-| `query_graph_tool` | Tracing callers, callees, imports, tests, dependencies |
-| `semantic_search_nodes_tool` | Finding functions/classes by name or keyword |
-| `get_architecture_overview_tool` | Understanding high-level codebase structure |
-| `refactor_tool` | Planning renames, finding dead code |
+| `detect_changes_tool` | Risk-scored change analysis |
+| `get_review_context_tool` | Token-efficient source snippets |
+| `get_impact_radius_tool` | Blast radius of a change |
+| `get_affected_flows_tool` | Impacted execution paths |
+| `query_graph_tool` | Trace callers, callees, imports, tests |
+| `semantic_search_nodes_tool` | Find functions/classes by keyword |
+| `get_architecture_overview_tool` | High-level structure |
+| `refactor_tool` | Rename planning, dead code |
 
 ### Workflow
 
